@@ -34,7 +34,7 @@ export default class SignIn extends Component {
                     </Row>
                     <Row>
                         <Col xs={{ order: 2 }}>
-                            <button type="button" onClick={this.onSignInClick} className="loginBtn loginBtn--google">Signin with Google</button>
+                            <button type="button" onClick={this.onSignInClick} className="loginBtn loginBtn--google">Sign in with Google</button>
                         </Col>
                     </Row>
                 </Container>
