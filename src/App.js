@@ -1,34 +1,59 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './App.css';
 import * as firebase from 'firebase/app';
+import { ToastContainer } from 'react-toastify';
 import SignIn from './screens/SignIn';
-
-console.log(process.env);
+import Home from './screens/Home';
 
 const {
-    FIREBASE_API_KEY, FIREBASE_AUTH_DOMAIN, FIREBASE_DATABASE_URL,
-    FIREBASE_PROJECT_ID, FIREBASE_STORAGE_BUCKET, FIREBASE_MESSAGING_SENDER_ID,
-    FIREBASE_APP_ID
+    REACT_APP_FIREBASE_API_KEY: apiKey,
+    REACT_APP_FIREBASE_AUTH_DOMAIN: authDomain,
+    REACT_APP_FIREBASE_DATABASE_URL: databaseURL,
+    REACT_APP_FIREBASE_PROJECT_ID: projectId,
+    REACT_APP_FIREBASE_STORAGE_BUCKET: storageBucket,
+    REACT_APP_FIREBASE_MESSAGING_SENDER_ID: messagingSenderId,
+    REACT_APP_FIREBASE_APP_ID: appId,
 } = process.env;
 
 firebase.initializeApp({
-    apiKey: FIREBASE_API_KEY,
-    authDomain: FIREBASE_AUTH_DOMAIN,
-    databaseURL: FIREBASE_DATABASE_URL,
-    projectId: FIREBASE_PROJECT_ID,
-    storageBucket: FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
-    appId: FIREBASE_APP_ID
+    apiKey,
+    authDomain,
+    databaseURL,
+    projectId,
+    storageBucket,
+    messagingSenderId,
+    appId,
 });
 
 firebase.auth().useDeviceLanguage();
 
-function App() {
-    return (
-        <div className="App">
-            <SignIn />
-        </div>
-    );
-}
+export default class App extends Component {
+    state = { user: null }
 
-export default App;
+    componentDidMount() {
+        this.unscribleUser = firebase.auth().onAuthStateChanged((user) => {
+            this.setState({ user });
+        });
+    }
+
+    componentWillUnmount() {
+        this.unscribleUser();
+    }
+
+    renderBody = () => {
+        const { user } = this.state;
+        if (user) {
+            return <Home />;
+        }
+        return <SignIn />;
+    }
+
+    render() {
+        return (
+            <div className="App">
+                <this.renderBody />
+                <ToastContainer />
+            </div>
+        );
+    }
+}

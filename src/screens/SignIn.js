@@ -3,30 +3,18 @@ import { Container, Row, Col } from 'react-bootstrap';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import './SignIn.css';
+import { toast } from 'react-toastify';
 
 const provider = new firebase.auth.GoogleAuthProvider();
 
 export default class SignIn extends Component {
     state = {}
 
-    onSignInPress = () => {
+    onSignInClick = () => {
         firebase.auth().signInWithPopup(provider).then((result) => {
-            // This gives you a Google Access Token. You can use it to access the Google API.
-            const token = result.credential.accessToken;
-            // The signed-in user info.
-            const { user } = result;
-            // ...
-            console.log({ user });
+            toast.success(`Welcome ${result.user.displayName}!`);
         }).catch((error) => {
-            // Handle Errors here.
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            // The email of the user's account used.
-            const { email } = error;
-            // The firebase.auth.AuthCredential type that was used.
-            const { credential } = error;
-            // ...
-            console.log({ error });
+            toast.error(error.message);
         });
     }
 
@@ -46,7 +34,7 @@ export default class SignIn extends Component {
                     </Row>
                     <Row>
                         <Col xs={{ order: 2 }}>
-                            <button type="button" className="loginBtn loginBtn--google">Login with Google</button>
+                            <button type="button" onClick={this.onSignInClick} className="loginBtn loginBtn--google">Signin with Google</button>
                         </Col>
                     </Row>
                 </Container>

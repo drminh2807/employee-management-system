@@ -4,14 +4,9 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-toastify/dist/ReactToastify.css';
 
-const { error, parsed } = require('dotenv').config();
-
-if (error) {
-    console.log({ error });
-}
-
-console.log({ parsed });
+require('dotenv').config();
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
